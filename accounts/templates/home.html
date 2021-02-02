@@ -1,0 +1,56 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Homepage</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+
+
+<body>
+ <h1>Welcome to the homepage {{customer.first_name}}</h1> 
+  <div>You are <span id="activity"></span></div>
+
+<script>
+  var token = '{{csrf_token}}';
+  var timeout;
+
+
+  document.addEventListener("mousemove", function() {
+     $.ajax({
+        url: '/update/',
+        headers: { "X-CSRFToken": token },
+        type: 'POST',
+        data: {
+          'active': true,
+        },
+        dataType: 'json',
+        success: function (data) {
+          document.getElementById("activity").innerHTML = "Active";
+        }
+    }); 
+    if (timeout) clearTimeout(timeout);
+    timeout = setTimeout(mouseStop, 3000);
+  });
+
+  function mouseStop() {
+     //document.getElementById("activity").innerHTML ="Inactive";
+     $.ajax({
+        url: '/update/',
+        headers: { "X-CSRFToken": token },
+        type: 'POST',
+        data: {
+          'active': false,
+        },
+        dataType: 'json',
+        success: function (data) {
+          document.getElementById("activity").innerHTML = "Inactive";
+        }
+    });
+  }
+
+</script
+</body>
+</html>
